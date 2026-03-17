@@ -1,7 +1,8 @@
 ﻿namespace BlazorApp2test.Models
 {
-    public class BorgerModel
+    public class ResidentModel
     {
+        public Guid Id { get; set; }
         public string Navn { get; set; } = "";
         public string MedicinTider { get; set; } = "";
         public string PNTid { get; set; } = "";

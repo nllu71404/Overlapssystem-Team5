@@ -2,19 +2,20 @@
 @rendermode InteractiveServer
 @using BlazorApp2test.Models
 @using BlazorApp2test.Services
-@inject BorgerCRUD BorgerCRUD
+@inject ResidentServices ResidentServices
 
 
 <h3>OpretISystem</h3>
 
-<button @onclick="AddBorger">Tilføj borger</button>
+<button @onclick="AddResident">Tilføj borger</button>
 
 @code {
     // This function adds a new borger and it graps the list from Borger.cs with the default values. This function can then be used in BorgerSide.razor to add new borgere.
-    private void AddBorger()
+    private void AddResident()
     {
-        BorgerCRUD.Borgere.Add(new BorgerModel
+        ResidentServices.Borgere.Add(new ResidentModel
         {
+            Id = Guid.NewGuid(),
             Navn = "Ny Borger",
             MedicinTider = "",
             PNTid = "",
@@ -25,5 +26,4 @@
             Betaling = 0
         });
     }
-
 }

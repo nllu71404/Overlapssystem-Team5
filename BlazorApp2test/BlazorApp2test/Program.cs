@@ -8,7 +8,7 @@ builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents()
     .AddInteractiveWebAssemblyComponents();
 
-builder.Services.AddScoped<BorgerCRUD>();
+builder.Services.AddScoped<ResidentServices>();
 
 var app = builder.Build();
 
