@@ -1,0 +1,107 @@
+﻿@page "/borgerSide"
+@rendermode InteractiveServer
+@using BlazorApp2test.Models
+@using BlazorApp2test.Services
+@inject BorgerCRUD BorgerCRUD
+
+<h5>Overlap</h5>
+
+<!-- Here we use the BorgerCRUD.Borgere list, the list is called "Borgere" -->
+<EditForm Model="BorgerCRUD.Borgere">
+    
+<div class="borger-grid">
+    <!-- Here we use the BorgerCRUD.Borgere list, it is then used on each of the elements in the borger-kort div. -->
+    @foreach (var borger in BorgerCRUD.Borgere)
+    {
+        <div class="@($"borger-kort {GetRisikoClass(borger.Risiko)}")">
+            
+            <!-- Here sætter vi navn og binder værdien til borger.navn-->
+            <InputText class="felt" placeholder="Navn" @bind-Value="borger.Navn" />
+
+            <!-- Here sætter vi risiko og binder værdien til borger.Risiko-->
+            <InputSelect class="felt" @bind-Value="borger.Risiko">
+                <option value="Groen">Grøn</option>
+                <option value="Gul">Gul</option>
+                <option value="Roed">Rød</option>
+            </InputSelect>
+
+            <InputText class="felt" placeholder="PN-Tid" @bind-Value="borger.PNTid" />
+
+            <textarea class="felt status-felt" placeholder="Medicin tider" @bind="borger.MedicinTider"></textarea>
+
+            <textarea class="felt status-felt" placeholder="Status" @bind="borger.Status"></textarea>
+
+            <InputText class="felt" placeholder="Handledag" @bind-Value="borger.Handledag" />
+
+            <InputNumber class="felt" @bind-Value="borger.Betaling" />
+        </div>
+    }
+</div>
+</EditForm>
+
+<style>
+
+    .borger-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 8px;
+    }
+
+    .borger-kort {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        padding: 12px;
+        border-radius: 12px;
+        box-sizing: border-box;
+    }
+
+    .felt {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        box-sizing: border-box;
+    }
+
+    .status-felt {
+        min-height: 80px;
+        resize: vertical;
+    }
+
+    .risiko-groen {
+        background-color: #c8f7d2;
+        border: 2px solid #198754;
+        border-left: 14px solid #198754;
+        box-shadow: 0 0 6px rgba(25, 135, 84, 0.35);
+    }
+
+    .risiko-gul {
+        background-color: #fff0a8;
+        border: 2px solid #e0a800;
+        border-left: 14px solid #e0a800;
+        box-shadow: 0 0 6px rgba(224, 168, 0, 0.35);
+    }
+
+    .risiko-roed {
+        background-color: #f8b8be;
+        border: 2px solid #dc3545;
+        border-left: 14px solid #dc3545;
+        box-shadow: 0 0 6px rgba(220, 53, 69, 0.35);
+    }
+
+</style>
+
+@code {
+    private string GetRisikoClass(Risiko risiko)
+    {
+        if (risiko == Risiko.Groen)
+            return "risiko-groen";
+        else if (risiko == Risiko.Gul)
+            return "risiko-gul";
+        else if (risiko == Risiko.Roed)
+            return "risiko-roed";
+        else
+            return "";
+    }
+}
