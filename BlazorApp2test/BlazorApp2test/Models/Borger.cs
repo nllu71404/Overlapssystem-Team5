@@ -1,6 +1,6 @@
 ﻿namespace BlazorApp2test.Models
 {
-    public class Borger
+    public class BorgerModel
     {
         public string Navn { get; set; } = "";
         public string MedicinTider { get; set; } = "";

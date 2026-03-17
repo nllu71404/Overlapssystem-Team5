@@ -13,7 +13,7 @@
     // This function adds a new borger and it graps the list from Borger.cs with the default values. This function can then be used in BorgerSide.razor to add new borgere.
     private void AddBorger()
     {
-        BorgerCRUD.Borgere.Add(new Borger
+        BorgerCRUD.Borgere.Add(new BorgerModel
         {
             Navn = "Ny Borger",
             MedicinTider = "",
