@@ -8,7 +8,7 @@ builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents()
     .AddInteractiveWebAssemblyComponents();
 
-builder.Services.AddScoped<ResidentServices>();
+builder.Services.AddScoped<ResidentService>();
 
 var app = builder.Build();
 

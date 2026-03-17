@@ -2,18 +2,18 @@
 @rendermode InteractiveServer
 @using BlazorApp2test.Models
 @using BlazorApp2test.Services
-@inject ResidentServices ResidentServices
+@inject ResidentService ResidentService
 
 <h5>Overlap</h5>
 
 
 
 <!-- Here we use the BorgerCRUD.Borgere list, the list is called "Borgere" -->
-<EditForm Model="ResidentServices.Borgere">
+<EditForm Model="ResidentService.Borgere">
 
 <div class="borger-grid">
     <!-- Here we use the BorgerCRUD.Borgere list, it is then used on each of the elements in the borger-kort div. -->
-        @foreach (var borger in ResidentServices.Borgere)
+        @foreach (var borger in ResidentService.Borgere)
     {
         <div class="@($"borger-kort {GetRisikoClass(borger.Risiko)}")">
             
@@ -37,7 +37,7 @@
 
             <InputNumber class="felt" @bind-Value="borger.Betaling" />
 
-            <button type="button" class="btn btn-danger" @onclick="() => ResidentServices.RemoveBorger(borger)">
+            <button type="button" class="btn btn-danger" @onclick="() => ResidentService.RemoveBorger(borger)">
             Fjern borger
             </button>
         </div>
@@ -49,13 +49,14 @@
 
     .borger-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
         gap: 8px;
     }
 
     .borger-kort {
         display: flex;
         flex-direction: column;
+        max-width: 250px;
         gap: 12px;
         padding: 12px;
         border-radius: 12px;
@@ -110,4 +111,6 @@
         else
             return "";
     }
+
+    
 }
