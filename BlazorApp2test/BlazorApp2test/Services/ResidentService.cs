@@ -4,16 +4,37 @@ namespace BlazorApp2test.Services
 {
     public class ResidentService
     {
-        public List<ResidentModel> Borgere { get; } = new();
+        public List<ResidentModel> BorgereSkoven { get; } = new();
+        public List<ResidentModel> BorgereSlottet { get; } = new();
 
-        public void RemoveBorger(ResidentModel borger)
+        public void RemoveBorgerSkoven(ResidentModel borger)
         {
-            Borgere.Remove(borger);
+            BorgereSkoven.Remove(borger);
+        }
+        public void RemoveBorgerSlottet(ResidentModel borger)
+        {
+            BorgereSlottet.Remove(borger);
         }
 
-        public void AddResident()
+        public void AddResidentSkoven()
         {
-            Borgere.Add(new ResidentModel
+            BorgereSkoven.Add(new ResidentModel
+            {
+                Id = Guid.NewGuid(),
+                Navn = "Ny Borger",
+                MedicinTider = "",
+                PNTid = "",
+                Status = "",
+                Risiko = Risiko.Green,
+                Handledag = "",
+                HandleTidspunkt = "",
+                Betaling = ""
+            });
+        }
+
+        public void AddResidentSlottet()
+        {
+            BorgereSlottet.Add(new ResidentModel
             {
                 Id = Guid.NewGuid(),
                 Navn = "Ny Borger",
