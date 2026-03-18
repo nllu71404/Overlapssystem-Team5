@@ -7,16 +7,16 @@
         public string MedicinTider { get; set; } = "";
         public string PNTid { get; set; } = "";
         public string Status { get; set; } = "";
-        public Risiko Risiko { get; set; } = Risiko.Groen;
+        public Risiko Risiko { get; set; } = Risiko.Green;
         public string Handledag { get; set; } = "";
         public string HandleTidspunkt { get; set; } = "";
-        public decimal Betaling { get; set; } = 0;
+        public string Betaling { get; set; } = "";
     }
 
     public enum Risiko
     {
-        Groen,
-        Gul,
-        Roed
+        Green,
+        Yellow,
+        Red
     }
 }

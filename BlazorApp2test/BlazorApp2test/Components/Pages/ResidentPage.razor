@@ -22,9 +22,9 @@
 
             <!-- Here sætter vi risiko og binder værdien til borger.Risiko-->
             <InputSelect class="felt" @bind-Value="borger.Risiko">
-                <option value="Groen">Grøn</option>
-                <option value="Gul">Gul</option>
-                <option value="Roed">Rød</option>
+                <option value="Green">Grøn</option>
+                <option value="Yellow">Gul</option>
+                <option value="Red">Rød</option>
             </InputSelect>
 
             <InputText class="felt" placeholder="PN-Tid" @bind-Value="borger.PNTid" />
@@ -35,7 +35,7 @@
 
             <InputText class="felt" placeholder="Handledag" @bind-Value="borger.Handledag" />
 
-            <InputNumber class="felt" @bind-Value="borger.Betaling" />
+            <InputText class="felt" placeholder="kr." @bind-Value="borger.Betaling" />
 
             <button type="button" class="btn btn-danger" @onclick="() => ResidentService.RemoveBorger(borger)">
             Fjern borger
@@ -76,21 +76,21 @@
         resize: vertical;
     }
 
-    .risiko-groen {
+    .risiko-green {
         background-color: #c8f7d2;
         border: 2px solid #198754;
         border-left: 14px solid #198754;
         box-shadow: 0 0 6px rgba(25, 135, 84, 0.35);
     }
 
-    .risiko-gul {
+    .risiko-yellow {
         background-color: #fff0a8;
         border: 2px solid #e0a800;
         border-left: 14px solid #e0a800;
         box-shadow: 0 0 6px rgba(224, 168, 0, 0.35);
     }
 
-    .risiko-roed {
+    .risiko-red {
         background-color: #f8b8be;
         border: 2px solid #dc3545;
         border-left: 14px solid #dc3545;

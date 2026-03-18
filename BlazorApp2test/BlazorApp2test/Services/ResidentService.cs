@@ -20,10 +20,10 @@ namespace BlazorApp2test.Services
                 MedicinTider = "",
                 PNTid = "",
                 Status = "",
-                Risiko = Risiko.Groen,
+                Risiko = Risiko.Green,
                 Handledag = "",
                 HandleTidspunkt = "",
-                Betaling = 0
+                Betaling = ""
             });
         }
     }

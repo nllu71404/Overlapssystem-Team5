@@ -4,12 +4,12 @@
     {
         public static string GetRisikoClass(Risiko risiko)
         {
-            if (risiko == Risiko.Groen)
-                return "risiko-groen";
-            else if (risiko == Risiko.Gul)
-                return "risiko-gul";
-            else if (risiko == Risiko.Roed)
-                return "risiko-roed";
+            if (risiko == Risiko.Green)
+                return "risiko-green";
+            else if (risiko == Risiko.Yellow)
+                return "risiko-yellow";
+            else if (risiko == Risiko.Red)
+                return "risiko-red";
             else
                 return "";
         }
