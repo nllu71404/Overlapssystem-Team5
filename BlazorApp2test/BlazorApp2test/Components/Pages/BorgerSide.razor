@@ -1,4 +1,4 @@
-﻿@page "/borgerSide"
+﻿@page "/"
 @rendermode InteractiveServer
 @using BlazorApp2test.Models
 @using BlazorApp2test.Services
@@ -6,16 +6,16 @@
 
 <h5>Overlap</h5>
 
+<button @onclick="ResidentService.AddResident">Tilføj borger</button>
 
-
-<!-- Here we use the BorgerCRUD.Borgere list, the list is called "Borgere" -->
+<!-- Here we use the ResidentService.Borgere list, the list is called "Borgere" -->
 <EditForm Model="ResidentService.Borgere">
 
 <div class="borger-grid">
-    <!-- Here we use the BorgerCRUD.Borgere list, it is then used on each of the elements in the borger-kort div. -->
+        <!-- Here we use the ResidentService.Borgere list, it is then used on each of the elements in the borger-kort div. -->
         @foreach (var borger in ResidentService.Borgere)
     {
-        <div class="@($"borger-kort {GetRisikoClass(borger.Risiko)}")">
+            <div class="@($"borger-kort {ResidentHelper.GetRisikoClass(borger.Risiko)}")">
             
             <!-- Here sætter vi navn og binder værdien til borger.navn-->
             <InputText class="felt" placeholder="Navn" @bind-Value="borger.Navn" />
@@ -100,17 +100,5 @@
 </style>
 
 @code {
-    private string GetRisikoClass(Risiko risiko)
-    {
-        if (risiko == Risiko.Groen)
-            return "risiko-groen";
-        else if (risiko == Risiko.Gul)
-            return "risiko-gul";
-        else if (risiko == Risiko.Roed)
-            return "risiko-roed";
-        else
-            return "";
-    }
-
     
 }
