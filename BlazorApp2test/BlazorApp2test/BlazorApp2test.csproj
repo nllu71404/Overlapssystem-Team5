@@ -10,9 +10,12 @@
 	<ItemGroup>
 		<ProjectReference Include="..\BlazorApp2test.Client\BlazorApp2test.Client.csproj" />
 		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="8.0.0" />
+		<PackageReference Include="Microsoft.Data.SqlClient" Version="7.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Folder Include="Data\" />
+	  <Folder Include="Repositories\" />
 	  <Folder Include="Shared\" />
 	</ItemGroup>
 

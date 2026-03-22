@@ -7,7 +7,14 @@
 
 <h5>Overlap</h5>
 
+<!-- Adds a resident to the borger-kort -->
 <button @onclick="ResidentService.AddResidentSkoven">Tilføj borger</button>
+
+<!-- Saves the first resident in the BorgereSkoven list to the database -->
+<button type="button" class="btn btn-success" @onclick="ResidentService.SaveAllSkovenResidentsAsync">
+    Gem alle i database
+</button>
+
 
 <!-- Here we use the ResidentService.BorgereSkoven list, the list is called "Borgere" -->
 <EditForm Model="ResidentService.BorgereSkoven">
@@ -35,6 +42,8 @@
             <textarea class="felt status-felt" placeholder="Status" @bind="borger.Status"></textarea>
 
             <InputText class="felt" placeholder="Handledag" @bind-Value="borger.Handledag" />
+
+            <InputText class="felt" placeholder="Handletidspunkt" @bind-Value="borger.HandleTidspunkt" />
 
             <InputText class="felt" placeholder="kr." @bind-Value="borger.Betaling" />
 
