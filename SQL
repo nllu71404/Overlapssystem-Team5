@@ -1,0 +1,62 @@
+
+-- Sletter database
+USE master; 
+GO
+IF DB_ID('ProjektDB') IS NOT NULL BEGIN ALTER DATABASE ProjektDB SET SINGLE_USER WITH ROLLBACK IMMEDIATE; DROP DATABASE ProjektDB; 
+END 
+GO
+
+-- Opretter database
+CREATE DATABASE ProjektDB; 
+GO
+USE ProjektDB; 
+GO
+
+
+-- Opretter tabler i database ProjektDB
+CREATE TABLE dbo.MedicinTime (
+MedicinTimeID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+MeidicinTime DATETIME NULL
+
+);
+GO
+
+CREATE TABLE dbo.PNMedicin (
+PNID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+PNTime DATETIME NULL,
+Reason NVARCHAR(100) NULL,
+PNTimeStamp DATETIME NULL
+
+);
+GO
+
+CREATE TABLE dbo.Shopping (
+ShoppingID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+ShoppingDay DATE NULL,
+ShoppingTime DATETIME NULL,
+PaymentMethod NVARCHAR(100) NULL
+
+);
+GO
+
+CREATE TABLE dbo.Resident (
+ResidentName NVARCHAR(100),
+ResidentID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+MedicinTimeID INT FOREIGN KEY REFERENCES dbo.MedicinTime(MedicinTimeID),
+PNID INT FOREIGN KEY REFERENCES dbo.PNMedicin(PNID),
+ShoppingID INT FOREIGN KEY REFERENCES dbo.Shopping(ShoppingID),
+ResidentStatus NVARCHAR(100),
+Risk NVARCHAR(100) NULL
+
+);
+GO
+
+CREATE TABLE dbo.Department (
+DepartmentName NVARCHAR(100) NOT NULL,
+DepartmentID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+ResidentID INT FOREIGN KEY REFERENCES dbo.Resident(ResidentID),
+DepartmentAssignmentID INT,
+TelephoneNummerID INT
+
+);
+GO
