@@ -89,7 +89,7 @@ GO
 
 
 -- Opretter Stored Procedures
-CREATE OR ALTER PROCEDURE dbo.usp_AddResidentToOverlapScheme
+CREATE OR ALTER PROCEDURE dbo.uspAddResidentToOverlapScheme
     @OverlapSchemeID INT,
     @ResidentID INT
 AS
@@ -191,3 +191,21 @@ VALUES
 SELECT SCOPE_IDENTITY() AS NewResidentID;
 END;
 GO
+
+CREATE OR ALTER PROCEDURE dbo.uspCreateOverlapScheme
+    @OverlapSchemeDate DATETIME = NULL
+AS
+BEGIN
+    SET NOCOUNT ON;
+    SET XACT_ABORT ON;
+
+    IF @OverlapSchemeDate IS NULL
+        SET @OverlapSchemeDate = GETDATE();
+
+    INSERT INTO dbo.OverlapScheme (OverlapSchemeDate)
+    VALUES (@OverlapSchemeDate);
+
+    SELECT CAST(SCOPE_IDENTITY() AS INT) AS NewOverlapSchemeID;
+END;
+GO
+
