@@ -1,19 +1,20 @@
-
--- Sletter database
 USE master; 
 GO
 IF DB_ID('ProjektDB') IS NOT NULL BEGIN ALTER DATABASE ProjektDB SET SINGLE_USER WITH ROLLBACK IMMEDIATE; DROP DATABASE ProjektDB; 
 END 
 GO
 
--- Opretter database
 CREATE DATABASE ProjektDB; 
 GO
 USE ProjektDB; 
 GO
 
+-- 3. TABELLER
+-- Company CREATE TABLE dbo.Company ( CompanyId INT IDENTITY(1,1) NOT NULL PRIMARY KEY, CompanyName NVARCHAR(100) NOT NULL ); GO
+ 
+-- FOREIGN KEY (CompanyId) REFERENCES dbo.Company(CompanyId)
 
--- Opretter tabler i database ProjektDB
+
 CREATE TABLE dbo.MedicinTime (
 MedicinTimeID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
 MeidicinTime DATETIME NULL
@@ -51,6 +52,31 @@ Risk NVARCHAR(100) NULL
 );
 GO
 
+CREATE TABLE dbo.OverlapScheme (
+    OverlapSchemeID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+    OverlapSchemeDate DATETIME NOT NULL
+);
+GO
+
+CREATE TABLE dbo.OverlapSchemeResident (
+    OverlapSchemeID INT NOT NULL,
+    ResidentID INT NOT NULL,
+    ResidentStatus NVARCHAR(100) NULL,
+    Risk NVARCHAR(100) NULL,
+    MedicinTimeID INT NULL,
+    PNID INT NULL,
+    ShoppingID INT NULL,
+
+    PRIMARY KEY (OverlapSchemeID, ResidentID),
+
+    FOREIGN KEY (OverlapSchemeID) REFERENCES dbo.OverlapScheme(OverlapSchemeID),
+    FOREIGN KEY (ResidentID) REFERENCES dbo.Resident(ResidentID),
+    FOREIGN KEY (MedicinTimeID) REFERENCES dbo.MedicinTime(MedicinTimeID),
+    FOREIGN KEY (PNID) REFERENCES dbo.PNMedicin(PNID),
+    FOREIGN KEY (ShoppingID) REFERENCES dbo.Shopping(ShoppingID)
+);
+GO
+
 CREATE TABLE dbo.Department (
 DepartmentName NVARCHAR(100) NOT NULL,
 DepartmentID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
@@ -60,3 +86,75 @@ TelephoneNummerID INT
 
 );
 GO
+
+
+-- Opretter Stored Procedures
+CREATE OR ALTER PROCEDURE dbo.usp_AddResidentToOverlapScheme
+    @OverlapSchemeID INT,
+    @ResidentID INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+    SET XACT_ABORT ON;
+
+    -- Check that the overlap scheme exists
+    IF NOT EXISTS (
+        SELECT 1
+        FROM dbo.OverlapScheme
+        WHERE OverlapSchemeID = @OverlapSchemeID
+    )
+    BEGIN
+        THROW 50001, 'The specified OverlapSchemeID does not exist.', 1;
+    END;
+
+    -- Check that the resident exists
+    IF NOT EXISTS (
+        SELECT 1
+        FROM dbo.Resident
+        WHERE ResidentID = @ResidentID
+    )
+    BEGIN
+        THROW 50002, 'The specified ResidentID does not exist.', 1;
+    END;
+
+    -- Prevent duplicate insert
+    IF EXISTS (
+        SELECT 1
+        FROM dbo.OverlapSchemeResident
+        WHERE OverlapSchemeID = @OverlapSchemeID
+          AND ResidentID = @ResidentID
+    )
+    BEGIN
+        THROW 50003, 'This resident is already assigned to the specified overlap scheme.', 1;
+    END;
+
+    -- Copy resident data into OverlapSchemeResident
+    INSERT INTO dbo.OverlapSchemeResident
+    (
+        OverlapSchemeID,
+        ResidentID,
+        ResidentStatus,
+        Risk,
+        MedicinTimeID,
+        PNID,
+        ShoppingID
+    )
+    SELECT
+        @OverlapSchemeID,
+        r.ResidentID,
+        r.ResidentStatus,
+        r.Risk,
+        r.MedicinTimeID,
+        r.PNID,
+        r.ShoppingID
+    FROM dbo.Resident r
+    WHERE r.ResidentID = @ResidentID;
+
+    -- Optional: return the inserted row
+    SELECT *
+    FROM dbo.OverlapSchemeResident
+    WHERE OverlapSchemeID = @OverlapSchemeID
+      AND ResidentID = @ResidentID;
+END;
+GO
+
