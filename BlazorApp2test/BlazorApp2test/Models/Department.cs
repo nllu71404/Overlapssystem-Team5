@@ -6,10 +6,6 @@ namespace BlazorApp2test.Models
     {
         public int Id { get; set; }
 
-        public enum Risiko
-        {
-            Skoven,
-            Slottet
-        }
+        public string Name { get; set; } = "";
     }
 }
