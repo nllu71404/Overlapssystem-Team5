@@ -10,6 +10,7 @@ builder.Services.AddRazorComponents()
     .AddInteractiveWebAssemblyComponents();
 
 builder.Services.AddScoped<IResidentRepository, ResidentRepository>();
+builder.Services.AddScoped<IMedicinRepository, MedicinRepository>();
 builder.Services.AddScoped<ResidentService>();
 
 var app = builder.Build();

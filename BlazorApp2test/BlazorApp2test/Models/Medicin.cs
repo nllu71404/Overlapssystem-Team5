@@ -7,7 +7,9 @@ namespace BlazorApp2test.Models
         public int? MedicinTimeID { get; set; }
         public int ResidentID { get; set; }
         public DateTime MedicinTime { get; set; }
-        public DateTime TimeCheck { get; set; }
+        public DateTime? MedicinCheckTimeStamp { get; set; }
+
+        public bool IsChecked => MedicinCheckTimeStamp.HasValue;
     }
 }
 

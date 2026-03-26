@@ -3,7 +3,10 @@
 @rendermode InteractiveServer
 @using BlazorApp2test.Models
 @using BlazorApp2test.Services
+@using BlazorApp2test.Repositories
 @inject ResidentService ResidentService
+@inject IResidentRepository ResidentRepository
+@inject IMedicinRepository medicinRepository
 
 <h5>Overlap</h5>
 
@@ -13,20 +16,37 @@
     Hent alle beboere
 </button>
 
-<div>
-    <label>Afdelings ID: </label>
-    <input type="number" @bind="ResidentService.SelectedDepartmentId" />
-    <button @onclick="ResidentService.LoadResidentsByDepartmentAsync">
-        Hent beboere for afdeling
-    </button>
-</div>
-
 <h5>Opret ny beboer</h5>
 
 <div>
     <label>Navn </label>
     <input @bind="ResidentService.NewResident.Name" />
 </div>
+
+<div>
+    <select @bind="selectedTime">
+        @foreach (var t in availableTimes)
+        {
+            <option value="@t">@t.ToString(@"hh\:mm")</option>
+        }
+    </select>
+    <button @onclick="() => medicinRepository.SaveNewMedicinAsync(medicin)">Tilføj medicin tid</button>
+</div>
+
+<ul>
+    @foreach (var medTime in resident.MedicinTimes)
+    {
+<li>
+            <input type="checkbox" checked="@medTime.IsChecked"
+            @onchange="() => ResidentService.ToggleMedicinGivenAsync(medTime)" />
+            @medTime.MedicinTime.ToString(@"hh\:mm")
+            @if (medTime.MedicinCheckTimeStamp.HasValue)
+            {
+<span> - Givet: @medTime.MedicinCheckTimeStamp.Value.ToString("HH:mm")</span>
+            }
+</li>
+    }
+</ul>
 
 <div>
     <label>Status </label>
@@ -81,4 +101,24 @@
             </li>
         }
     </ul>
+}
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        ResidentService.SelectedDepartmentId = 2;
+        await ResidentService.LoadResidentsByDepartmentAsync();
+        
+    }
+
+    private TimeSpan selectedTime;
+
+    private List<TimeSpan> availableTimes = new List<TimeSpan>
+    {
+        new TimeSpan(8, 0, 0),
+        new TimeSpan(12, 0, 0),
+        new TimeSpan(18, 0, 0)
+    };
+
+    Medicin medicin = new Medicin();
+    Resident resident = new Resident();
 }

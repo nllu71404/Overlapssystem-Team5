@@ -87,10 +87,6 @@ namespace BlazorApp2test.Repositories
 
         public async Task UpdateResidentAsync(Resident resident)
         {
-            if (resident.ResidentId == null)
-            {
-                throw new ArgumentException("ResidentId is required to update a resident.");
-            }
 
             using SqlConnection connection = new SqlConnection(_connectionString);
             using SqlCommand command = new SqlCommand("dbo.uspUpdateResidentById", connection);
@@ -102,7 +98,7 @@ namespace BlazorApp2test.Repositories
                 resident.DepartmentId.HasValue ? resident.DepartmentId.Value : DBNull.Value;
             command.Parameters.Add("@ResidentStatus", SqlDbType.NVarChar, 100).Value = resident.Status;
             command.Parameters.Add("@Risk", SqlDbType.NVarChar, 100).Value = resident.Risiko.ToString();
-            command.Parameters.Add("@ResidentId", SqlDbType.Int).Value = resident.ResidentId.Value;
+            command.Parameters.Add("@ResidentId", SqlDbType.Int).Value = resident.ResidentId;
 
             await connection.OpenAsync();
             await command.ExecuteNonQueryAsync();
