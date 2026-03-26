@@ -1,60 +1,84 @@
 ﻿@page "/"
+@page "/Skoven"
 @rendermode InteractiveServer
 @using BlazorApp2test.Models
-@page "/Skoven"
 @using BlazorApp2test.Services
 @inject ResidentService ResidentService
 
 <h5>Overlap</h5>
 
-<!-- Adds a resident to the borger-kort -->
-<button @onclick="ResidentService.AddResidentSkoven">Tilføj borger</button>
 
-<!-- Saves the first resident in the BorgereSkoven list to the database -->
-<button type="button" class="btn btn-success" @onclick="ResidentService.SaveAllSkovenResidentsAsync">
-    Gem alle i database
+<!-- Du klikker på knappen og så henter den alle beboere ved at kalde funktion LoadResidentsAsync i ResidentService.cs-->
+<button @onclick="ResidentService.LoadResidentsAsync">
+    Hent alle beboere
 </button>
 
-
-<!-- Here we use the ResidentService.BorgereSkoven list, the list is called "Borgere" -->
-<EditForm Model="ResidentService.BorgereSkoven">
-
-<div class="borger-grid">
-        <!-- Here we use the ResidentService.BorgereSkoven list, it is then used on each of the elements in the borger-kort div. -->
-        @foreach (var borger in ResidentService.BorgereSkoven)
-    {
-            <div class="@($"borger-kort {ResidentHelper.GetRisikoClass(borger.Risiko)}")">
-            
-            <!-- Here sætter vi navn og binder værdien til borger.navn-->
-            <InputText class="felt" placeholder="Navn" @bind-Value="borger.Navn" />
-
-            <!-- Here sætter vi risiko og binder værdien til borger.Risiko-->
-            <InputSelect class="felt" @bind-Value="borger.Risiko">
-                <option value="Green">Grøn</option>
-                <option value="Yellow">Gul</option>
-                <option value="Red">Rød</option>
-            </InputSelect>
-
-            <InputText class="felt" placeholder="PN-Tid" @bind-Value="borger.PNTid" />
-
-            <textarea class="felt status-felt" placeholder="Medicin tider" @bind="borger.MedicinTider"></textarea>
-
-            <textarea class="felt status-felt" placeholder="Status" @bind="borger.Status"></textarea>
-
-            <InputText class="felt" placeholder="Handledag" @bind-Value="borger.Handledag" />
-
-            <InputText class="felt" placeholder="Handletidspunkt" @bind-Value="borger.HandleTidspunkt" />
-
-            <InputText class="felt" placeholder="kr." @bind-Value="borger.Betaling" />
-
-            <button type="button" class="btn btn-danger" @onclick="() => ResidentService.RemoveBorgerSkoven(borger)">
-            Fjern borger
-            </button>
-        </div>
-    }
+<div>
+    <label>Afdelings ID: </label>
+    <input type="number" @bind="ResidentService.SelectedDepartmentId" />
+    <button @onclick="ResidentService.LoadResidentsByDepartmentAsync">
+        Hent beboere for afdeling
+    </button>
 </div>
-</EditForm>
 
-@code {
-    
+<h5>Opret ny beboer</h5>
+
+<div>
+    <label>Navn </label>
+    <input @bind="ResidentService.NewResident.Name" />
+</div>
+
+<div>
+    <label>Status </label>
+    <input @bind="ResidentService.NewResident.Status" />
+</div>
+
+<div>
+    <label>Risiko </label>
+    <select @bind="ResidentService.NewResident.Risiko">
+        <option value="@Risiko.Green">Green</option>
+        <option value="@Risiko.Yellow">Yellow</option>
+        <option value="@Risiko.Red">Red</option>
+    </select>
+</div>
+
+<button @onclick="ResidentService.CreateResidentAsync">
+    Gem beboer
+</button>
+
+@if (ResidentService.Residents.Any())
+{
+    <ul>
+        @foreach (var resident in ResidentService.Residents)
+        {
+            <li style="margin-bottom: 15px;">
+                <div>
+                    <label>Navn </label>
+                    <input @bind="resident.Name" />
+                </div>
+
+                <div>
+                    <label>Status </label>
+                    <input @bind="resident.Status" />
+                </div>
+
+                <div>
+                    <label>Risiko </label>
+                    <select @bind="resident.Risiko">
+                        <option value="@Risiko.Green">Green</option>
+                        <option value="@Risiko.Yellow">Yellow</option>
+                        <option value="@Risiko.Red">Red</option>
+                    </select>
+                </div>
+
+                <button @onclick='() => ResidentService.SaveResidentAsync(resident)'>
+                    Gem ændringer
+                </button>
+
+                <button @onclick='() => ResidentService.DeleteResidentAsync(resident)'>
+                    Slet beboer
+                </button>
+            </li>
+        }
+    </ul>
 }

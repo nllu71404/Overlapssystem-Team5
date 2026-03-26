@@ -1,57 +1,10 @@
-﻿@page "/Slottet"
-@rendermode InteractiveServer
+﻿@rendermode InteractiveServer
 @using BlazorApp2test.Models
+@page "/Slottet"
 @using BlazorApp2test.Services
 @inject ResidentService ResidentService
 
 <h5>Overlap</h5>
-
-<!-- Adds a resident to the borger-kort -->
-<button @onclick="ResidentService.AddResidentSlottet">Tilføj borger</button>
-
-<!-- Saves the first resident in the BorgereSlottet list to the database -->
-<button type="button" class="btn btn-success" @onclick="ResidentService.SaveAllSlottetResidentsAsync">
-    Gem alle i database
-</button>
-
-<!-- Here we use the ResidentService.BorgereSlottet list, the list is called "Borgere" -->
-<EditForm Model="ResidentService.BorgereSlottet">
-
-<div class="borger-grid">
-        <!-- Here we use the ResidentService.BorgereSlottet list, it is then used on each of the elements in the borger-kort div. -->
-        @foreach (var borger in ResidentService.BorgereSlottet)
-    {
-            <div class="@($"borger-kort {ResidentHelper.GetRisikoClass(borger.Risiko)}")">
-            
-            <!-- Here sætter vi navn og binder værdien til borger.navn-->
-            <InputText class="felt" placeholder="Navn" @bind-Value="borger.Navn" />
-
-            <!-- Here sætter vi risiko og binder værdien til borger.Risiko-->
-            <InputSelect class="felt" @bind-Value="borger.Risiko">
-                <option value="Green">Grøn</option>
-                <option value="Yellow">Gul</option>
-                <option value="Red">Rød</option>
-            </InputSelect>
-
-            <InputText class="felt" placeholder="PN-Tid" @bind-Value="borger.PNTid" />
-
-            <textarea class="felt status-felt" placeholder="Medicin tider" @bind="borger.MedicinTider"></textarea>
-
-            <textarea class="felt status-felt" placeholder="Status" @bind="borger.Status"></textarea>
-
-            <InputText class="felt" placeholder="Handledag" @bind-Value="borger.Handledag" />
-
-            <InputText class="felt" placeholder="Handletidspunkt" @bind-Value="borger.HandleTidspunkt" />
-
-            <InputText class="felt" placeholder="kr." @bind-Value="borger.Betaling" />
-
-            <button type="button" class="btn btn-danger" @onclick="() => ResidentService.RemoveBorgerSlottet(borger)">
-            Fjern borger
-            </button>
-        </div>
-    }
-</div>
-</EditForm>
 
 @code {
     

@@ -1,4 +1,5 @@
 using BlazorApp2test.Components;
+using BlazorApp2test.Repositories;
 using BlazorApp2test.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,6 +9,7 @@ builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents()
     .AddInteractiveWebAssemblyComponents();
 
+builder.Services.AddScoped<IResidentRepository, ResidentRepository>();
 builder.Services.AddScoped<ResidentService>();
 
 var app = builder.Build();
