@@ -12,7 +12,7 @@ GO
 -- Tables are created underneath
 CREATE TABLE dbo.Department (
 DepartmentName NVARCHAR(100) NOT NULL,
-DepartmentID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+DepartmentID INT IDENTITY(1,1) NOT NULL PRIMARY KEY
 
 );
 GO
@@ -75,56 +75,81 @@ Test BIT NULL
 GO
 
 
-
-
-
--- Opretter Stored Procedures
--- Creates a resident to the table of Residents.
-CREATE OR ALTER PROCEDURE [dbo].[uspCreateResident]
+-- Creates Stored Procedures
+-- Creates a Resident to the table of Residents.
+CREATE OR ALTER PROCEDURE dbo.uspCreateResident
 @ResidentName NVARCHAR(100),
-@MedicinTimeID INT = NULL,
-@PNID INT = NULL,
-@ShoppingID INT = NULL,
+@DepartmentID INT = NULL,
 @ResidentStatus NVARCHAR(100) = NULL,
-@Risk NVARCHAR(100)
-
+@Risk NVARCHAR(100) = NULL
 AS
 BEGIN
 SET NOCOUNT ON;
 
-    INSERT INTO dbo.Resident 
+INSERT INTO dbo.Resident
 (
     ResidentName,
-MedicinTimeID,
-PNID,
-ShoppingID,
-ResidentStatus,
-Risk
- )
+    DepartmentID,
+    ResidentStatus,
+    Risk
+)
 VALUES
 (
-@ResidentName,
-@MedicinTimeID,
-@PNID,
-@ShoppingID,
-@ResidentStatus,
-@Risk
-)
-SELECT SCOPE_IDENTITY() AS NewResidentID;
+    @ResidentName,
+    @DepartmentID,
+    @ResidentStatus,
+    @Risk
+);
+
+SELECT SCOPE_IDENTITY() AS ResidentID;
 END;
 GO
 
--- Deletes a resident by ID from the table
-CREATE OR ALTER PROCEDURE dbo.uspDeleteResident
-@ResidentID INT
-
+-- Gets all Residents from the resident table.
+CREATE OR ALTER PROCEDURE dbo.uspGetResidents
 AS
 BEGIN
 SET NOCOUNT ON;
+SELECT * FROM dbo.Resident
+END;
+GO
 
-DELETE FROM dbo.Resident
-WHERE
-ResidentID = @ResidentID;
+-- Updates a resident by id in the resident table
+CREATE OR ALTER PROCEDURE dbo.uspUpdateResidentById
+@ResidentName NVARCHAR(100),
+@DepartmentID INT = NULL,
+@ResidentStatus NVARCHAR(100) = NULL,
+@Risk NVARCHAR(100) = NULL,
+@ResidentId INT
+AS
+BEGIN
+    UPDATE dbo.Resident
+    SET ResidentName = @ResidentName, 
+    ResidentStatus = @ResidentStatus, 
+    Risk = @Risk,
+    DepartmentID = @DepartmentID
+    WHERE ResidentID = @ResidentId;
 
 END;
 GO
+
+-- Delete an entry in the resident table
+CREATE OR ALTER PROCEDURE dbo.uspDeleteResident
+@ResidentId INT
+AS
+BEGIN
+DELETE FROM dbo.Resident WHERE ResidentID = @ResidentID
+END;
+GO
+
+-- Get Residents by department ID
+CREATE OR ALTER PROCEDURE dbo.uspGetResidentsByDepartmentID
+@DepartmentID INT
+AS
+BEGIN
+SELECT * FROM dbo.Resident WHERE DepartmentID = @DepartmentID
+END;
+GO
+
+
+
